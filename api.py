@@ -6,10 +6,15 @@ from extract import script_extract
 
 app = Flask(__name__)
 
-# Charger le scaler, PCA et le modèle KMeans
+# Charger le scaler et le modèle (le modèle sera utilisé pour la prédiction si nécessaire)
 scaler = joblib.load('scaler.pkl')
-pca = joblib.load('pca_transform.pkl')
+
+# Charger le modèle KMeans
 kmeans = joblib.load('kmeans_model.pkl')
+
+@app.route('/', methods=['GET'])
+def home():
+    return jsonify({"message": "API en ligne. Utilisez la route POST /predict pour prédire."})
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -38,11 +43,8 @@ def predict():
         # Normaliser les caractéristiques avec le scaler
         features_normalized = scaler.transform(features_7)
 
-        # Appliquer PCA sur les données normalisées
-        features_reduced = pca.transform(features_normalized)
-
         # Effectuer la prédiction avec KMeans
-        prediction = kmeans.predict(features_reduced)
+        prediction = kmeans.predict(features_normalized)
 
         # Afficher le résultat de la prédiction
         result = "Malware" if prediction[0] == 1 else "Légitime"

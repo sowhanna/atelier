@@ -1,7 +1,9 @@
 Flask
+pefile
 scikit-learn
 numpy
 pandas
 werkzeug
 gunicorn
 python-magic
+joblib

@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify
+from flask import Flask, request, jsonify ,render_template
 import joblib
 import numpy as np
 import os
@@ -12,9 +12,10 @@ pca = joblib.load('pca_transform.pkl')
 kmeans = joblib.load('kmeans_model.pkl')
 
 
+
 @app.route('/') 
-def home():
-    return "Service is live!"
+def home(): 
+    return render_template('index.html')
 
 @app.route('/predict', methods=['POST'])
 def predict():
@@ -22,12 +23,8 @@ def predict():
     print(f"Clés dans request.files : {list(request.files.keys())}")
     print(f"Clés dans request.form : {list(request.form.keys())}")
 
-    file_key = 'File' 
-    #if 'File' in request.files else 'file'
-    #if file_key not in request.files:
-       # return jsonify({'error': 'Aucun fichier fourni'}), 400
-    
-    if 'File' not in request.files:
+    file_key = 'File' if 'File' in request.files else 'file'
+    if file_key not in request.files:
         return jsonify({'error': 'Aucun fichier fourni'}), 400
 
     file = request.files[file_key]

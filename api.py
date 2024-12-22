@@ -11,6 +11,11 @@ scaler = joblib.load('scaler.pkl')
 pca = joblib.load('pca_transform.pkl')
 kmeans = joblib.load('kmeans_model.pkl')
 
+
+@app.route('/') 
+def home():
+    return "Service is live!"
+
 @app.route('/predict', methods=['POST'])
 def predict():
     print(f"Requête reçue : {request}")

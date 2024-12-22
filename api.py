@@ -22,7 +22,7 @@ def predict():
     print(f"Clés dans request.files : {list(request.files.keys())}")
     print(f"Clés dans request.form : {list(request.form.keys())}")
 
-    file_key = 'file' if 'file' in request.files else 'File'
+    file_key = 'File' if 'File' in request.files else 'file'
     if file_key not in request.files:
         return jsonify({'error': 'Aucun fichier fourni'}), 400
 

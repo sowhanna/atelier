@@ -11,8 +11,6 @@ scaler = joblib.load('scaler.pkl')
 pca = joblib.load('pca_transform.pkl')
 kmeans = joblib.load('kmeans_model.pkl')
 
-
-
 @app.route('/') 
 def home(): 
     return render_template('index.html')
@@ -28,7 +26,6 @@ def predict():
         return jsonify({'error': 'Aucun fichier fourni'}), 400
 
     file = request.files[file_key]
-
     try:
         file_path = os.path.join('temp', file.filename)
         file.save(file_path)
@@ -42,7 +39,7 @@ def predict():
         features_normalized = scaler.transform(features_7)
         features_reduced = pca.transform(features_normalized)
         prediction = kmeans.predict(features_reduced)
-        result = "Malware" if prediction[0] == 1 else "Légitime"
+        result = "LEGITIME" if prediction[0] == 1 else "MALEWARE"
 
         return jsonify({
             'prediction': result,
@@ -52,11 +49,8 @@ def predict():
         print(f"Erreur lors du traitement du fichier: {str(e)}")
         return jsonify({'error': f'Erreur lors du traitement du fichier: {str(e)}'}), 500
 
-
-
 if __name__ == '__main__':
     # Créer un dossier temporaire pour les fichiers téléchargés si nécessaire
     os.makedirs('temp', exist_ok=True)
-
     # Lancer l'API Flask
     app.run(debug=True)
